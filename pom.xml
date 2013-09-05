@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.ronnyfriedland</groupId>
     <artifactId>tail-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>TAIL::PARENT</name>
     <modules>
         <module>tail-lib</module>
         <module>tail-web</module>
-        <module>tail-cmd</module>
+        <module>tail-cli</module>
     </modules>
 
     <dependencyManagement>

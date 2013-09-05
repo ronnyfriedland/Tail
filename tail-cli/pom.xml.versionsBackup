@@ -7,9 +7,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <groupId>de.ronnyfriedland</groupId>
-    <artifactId>tail-cmd</artifactId>
+    <artifactId>tail-cli</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>TAIL::CMD</name>
+    <name>TAIL::CLI</name>
 
     <build>
         <plugins>
@@ -24,7 +24,7 @@
                     <archive>
                         <manifest>
                             <mainClass>
-                                de.ronnyfriedland.tail.cmd.TailCmd
+                                de.ronnyfriedland.tail.cmd.TailCli
                             </mainClass>
                         </manifest>
                     </archive>

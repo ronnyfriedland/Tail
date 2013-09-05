@@ -4,11 +4,11 @@
     <parent>
         <artifactId>tail-parent</artifactId>
         <groupId>de.ronnyfriedland</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <groupId>de.ronnyfriedland</groupId>
     <artifactId>tail-lib</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>TAIL::LIB</name>
 
     <dependencies>

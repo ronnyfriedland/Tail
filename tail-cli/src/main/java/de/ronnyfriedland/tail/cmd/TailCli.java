@@ -12,6 +12,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import de.ronnyfriedland.tail.lib.Tail;
+import de.ronnyfriedland.tail.lib.Tail.Source;
 
 /**
  * Command line tool to tail logfiles.
@@ -19,14 +20,14 @@ import de.ronnyfriedland.tail.lib.Tail;
  * @author Ronny Friedland
  */
 @SuppressWarnings("static-access")
-public class TailCmd {
+public class TailCli {
 
     private transient Options options = new Options();
 
     /**
-     * Creates a new {@link TailCmd} instance.
+     * Creates a new {@link TailCli} instance.
      */
-    public TailCmd() {
+    public TailCli() {
         Option optionUrl = OptionBuilder.withArgName("url").hasArg().withDescription("url of logfile")
                 .withType(String.class).create("url");
         options.addOption(optionUrl);
@@ -67,7 +68,8 @@ public class TailCmd {
 
         Tail tail = new Tail();
         while (true) {
-            System.out.print(tail.getAvailableData(url));
+            // TODO: add possibility to choose
+            System.out.print(tail.getAvailableData(Source.HTTP, url));
             try {
                 Thread.sleep(TimeUnit.SECONDS.toMillis(interval));
             } catch (InterruptedException e) {
@@ -78,7 +80,7 @@ public class TailCmd {
 
     private void printUsage() {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(TailCmd.class.getSimpleName(), options);
+        formatter.printHelp(TailCli.class.getSimpleName(), options);
     }
 
     /**
@@ -88,7 +90,7 @@ public class TailCmd {
      * @throws Exception any unexpected exception
      */
     public static void main(final String[] args) throws Exception {
-        new TailCmd().startup(args);
+        new TailCli().startup(args);
     }
 
 }

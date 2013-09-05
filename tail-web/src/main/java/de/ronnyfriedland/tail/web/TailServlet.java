@@ -6,6 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import de.ronnyfriedland.tail.lib.Tail;
+import de.ronnyfriedland.tail.lib.Tail.Source;
 
 /**
  * Simple servlet that provides the new logfile rows
@@ -26,7 +27,8 @@ public class TailServlet {
     @GET
     @Path("data")
     public String getData(final @QueryParam("url") String url) throws Exception {
-        return new Tail().getAvailableData(url);
+        // TODO: add possibility to choose
+        return new Tail().getAvailableData(Source.HTTP, url);
     }
 
 }

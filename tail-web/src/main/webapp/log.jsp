@@ -9,7 +9,7 @@
 <script>
 	jQuery(document).ready(
 			function() {
-				var interval;
+				var interval = 30000;
 				setInterval(function() {
 					/*
 					 * The url must be provided as request parameter

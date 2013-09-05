@@ -1,4 +1,4 @@
-package de.ronnyfriedland.tail.lib.enums;
+package de.ronnyfriedland.tail.lib.http;
 
 public enum Headers {
 
