@@ -29,6 +29,9 @@
 					jQuery('#content').append(data);
 				});
 			}
+			
+			location.href = "#footer";
+			
 		}, interval);
 	});
 	
@@ -55,6 +58,9 @@
     <a href="javascript:removehighlight();">clear</a>
     <hr/>
     <pre id="content"></pre>
+  </div>
+  <div id="footer">
+    <a href="#footer"></a>
   </div>
 </body>
 </html>
