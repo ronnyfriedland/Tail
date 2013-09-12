@@ -11,8 +11,9 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import de.ronnyfriedland.tail.lib.Tail;
-import de.ronnyfriedland.tail.lib.Tail.Source;
+import de.ronnyfriedland.tail.lib.cmd.Cmd;
+import de.ronnyfriedland.tail.lib.http.HttpCmd;
+import de.ronnyfriedland.tail.lib.script.ScriptCmd;
 
 /**
  * Command line tool to tail logfiles.
@@ -28,9 +29,13 @@ public class TailCli {
      * Creates a new {@link TailCli} instance.
      */
     public TailCli() {
-        Option optionUrl = OptionBuilder.withArgName("url").hasArg().withDescription("url of logfile")
-                .withType(String.class).create("url");
-        options.addOption(optionUrl);
+        Option optionsrc = OptionBuilder.withArgName("src").hasArg().withDescription("src of logfile")
+                .withType(String.class).isRequired().create("src");
+        options.addOption(optionsrc);
+
+        Option optiontype = OptionBuilder.withArgName("type").hasArg().withDescription("type of source (http|script)")
+                .withType(String.class).isRequired().create("type");
+        options.addOption(optiontype);
 
         Option optionInterval = OptionBuilder.withArgName("interval").hasArg()
                 .withDescription("interval of retrieve (default: 30 seconds)").withType(Integer.class)
@@ -54,22 +59,23 @@ public class TailCli {
             return;
         }
 
-        String url = null;
-        Integer interval = null;
         // mandatory
-        if (line.hasOption("url")) {
-            url = line.getOptionValue("url");
+        String src = line.getOptionValue("src");
+        String type = line.getOptionValue("type");
+        // optional
+        Integer interval = Integer.valueOf(line.getOptionValue("interval", "30"));
+
+        Cmd cmd;
+        if ("http".equals(type)) {
+            cmd = new HttpCmd();
+        } else if ("script".equals(type)) {
+            cmd = new ScriptCmd();
         } else {
             printUsage();
             return;
         }
-        // optional
-        interval = Integer.valueOf(line.getOptionValue("interval", "30"));
-
-        Tail tail = new Tail();
         while (true) {
-            // TODO: add possibility to choose
-            System.out.print(tail.getAvailableData(Source.HTTP, url));
+            System.out.print(cmd.getAvailableData(src));
             try {
                 Thread.sleep(TimeUnit.SECONDS.toMillis(interval));
             } catch (InterruptedException e) {

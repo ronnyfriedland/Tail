@@ -40,6 +40,9 @@ public class HttpCmd implements Cmd {
      */
     @Override
     public String getAvailableData(final String url) {
+        if ((null == url) || "".equals(url)) {
+            throw new IllegalArgumentException("url must not be empty");
+        }
         String result = "";
         try {
             long availableSize = getAvailableContentLength(url);
