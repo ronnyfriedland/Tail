@@ -26,7 +26,7 @@ import de.ronnyfriedland.tail.lib.cmd.Cmd;
  */
 public class HttpCmd implements Cmd {
 
-    /** Logger for UrlCmd */
+    /** Logger for {@link HttpCmd} */
     private static final java.util.logging.Logger LOG = java.util.logging.Logger.getLogger(HttpCmd.class.getName());
 
     private static final HttpClient httpClient = new DefaultHttpClient();
@@ -50,7 +50,8 @@ public class HttpCmd implements Cmd {
             if (availableSize > contentLength) {
                 long newDataSize;
                 if (0 == contentLength) {
-                    newDataSize = availableSize;
+                    contentLength = availableSize - contentRange;
+                    newDataSize = contentRange;
                 } else {
                     newDataSize = Math.min(contentRange, availableSize - contentLength);
                 }
