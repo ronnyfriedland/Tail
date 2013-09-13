@@ -12,11 +12,13 @@ import org.apache.commons.exec.PumpStreamHandler;
 import de.ronnyfriedland.tail.lib.cmd.Cmd;
 
 /**
+ * Access logdata via custom script
+ * 
  * @author Ronny Friedland
  */
 public class ScriptCmd implements Cmd {
 
-    /** Logger for ScriptCmd */
+    /** Logger for {@link ScriptCmd} */
     private static final java.util.logging.Logger LOG = java.util.logging.Logger.getLogger(ScriptCmd.class.getName());
 
     /**

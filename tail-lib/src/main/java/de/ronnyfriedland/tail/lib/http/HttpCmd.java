@@ -1,10 +1,3 @@
-/*
- * Copyright (c) 2013 T-Systems Multimedia Solutions GmbH
- * Riesaer Str. 5, D-01129 Dresden, Germany
- * All rights reserved.
- *
- * $Id$
- */
 package de.ronnyfriedland.tail.lib.http;
 
 import java.io.IOException;
@@ -22,6 +15,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import de.ronnyfriedland.tail.lib.cmd.Cmd;
 
 /**
+ * Access logdata via http request
+ * 
  * @author Ronny Friedland
  */
 public class HttpCmd implements Cmd {

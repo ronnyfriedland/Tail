@@ -1,6 +1,8 @@
 package de.ronnyfriedland.tail.lib.cmd;
 
 /**
+ * Interface to define a command.
+ * 
  * @author Ronny Friedland
  */
 public interface Cmd {
