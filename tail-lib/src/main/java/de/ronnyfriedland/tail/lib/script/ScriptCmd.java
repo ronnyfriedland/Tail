@@ -9,6 +9,7 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import de.ronnyfriedland.tail.lib.cmd.Cmd;
 
@@ -22,8 +23,8 @@ public class ScriptCmd implements Cmd {
     /** Logger for {@link ScriptCmd} */
     private static final java.util.logging.Logger LOG = java.util.logging.Logger.getLogger(ScriptCmd.class.getName());
 
-    private static long contentLength = 0;
-    private static long contentRange = 2048;
+    private static int contentLength = 0;
+    private static int contentRange = 2048;
 
     /**
      * {@inheritDoc}
@@ -53,24 +54,23 @@ public class ScriptCmd implements Cmd {
             }
         }
 
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
-        try {
-            long availableSize = outputStream.size();
-            if (availableSize > contentLength) {
-                long newDataSize;
-                if (0 == contentLength) {
-                    contentLength = availableSize - contentRange;
-                    newDataSize = contentRange;
-                } else {
-                    newDataSize = Math.min(contentRange, availableSize - contentLength);
-                }
-                IOUtils.copyLarge(new ByteArrayInputStream(outputStream.toByteArray()), result, contentLength,
-                        contentLength + newDataSize);
-                contentLength += newDataSize;
+        String result = "";
+        int availableSize = outputStream.size();
+        if (availableSize > contentLength) {
+            int newDataSize;
+            if (0 == contentLength) {
+               if(availableSize > contentRange) {
+                   contentLength = availableSize - contentRange;
+                   newDataSize = availableSize;
+               } else {
+                   newDataSize = contentRange;
+               }
+            } else {
+               newDataSize = Math.min(contentRange, availableSize - contentLength);
             }
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, "error retrieving data", e);
+            result = StringUtils.substring(outputStream.toString(), contentLength, contentLength + newDataSize);
+            contentLength += newDataSize;
         }
-        return (result.toString());
+        return result;
     }
 }

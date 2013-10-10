@@ -25,8 +25,8 @@ public class HttpCmd implements Cmd {
     private static final java.util.logging.Logger LOG = java.util.logging.Logger.getLogger(HttpCmd.class.getName());
 
     private static final HttpClient httpClient = new DefaultHttpClient();
-    private static long contentLength = 0;
-    private static long contentRange = 2048;
+    private static int contentLength = 0;
+    private static int contentRange = 2048;
 
     /**
      * {@inheritDoc}
@@ -40,13 +40,17 @@ public class HttpCmd implements Cmd {
         }
         String result = "";
         try {
-            long availableSize = getAvailableContentLength(url);
+            int availableSize = getAvailableContentLength(url);
             // only if new data is available
             if (availableSize > contentLength) {
-                long newDataSize;
+                int newDataSize;
                 if (0 == contentLength) {
-                    contentLength = availableSize - contentRange;
-                    newDataSize = contentRange;
+                   if(availableSize > contentRange) {
+                      contentLength = availableSize - contentRange;
+                      newDataSize = availableSize;
+                   } else {
+                      newDataSize = contentRange;
+                   }
                 } else {
                     newDataSize = Math.min(contentRange, availableSize - contentLength);
                 }
@@ -63,21 +67,21 @@ public class HttpCmd implements Cmd {
         return result;
     }
 
-    private long getAvailableContentLength(final String url) throws IOException {
+    private int getAvailableContentLength(final String url) throws IOException {
         HttpHead head = new HttpHead(url);
         HttpResponse response = httpClient.execute(head);
         Header contentLength = response.getFirstHeader(Headers.CONTENT_LENGTH.getValue());
-        return Long.valueOf(contentLength.getValue());
+        return Integer.valueOf(contentLength.getValue());
     }
 
-    private String processResponse(final HttpResponse response, final long length) throws IOException {
+    private String processResponse(final HttpResponse response, final int length) throws IOException {
         HttpEntity entity = response.getEntity();
         InputStream in = entity.getContent();
 
         String resultString = "";
         try {
-            byte[] result = new byte[(int) length];
-            in.read(result, 0, (int) length);
+            byte[] result = new byte[length];
+            in.read(result, 0, length);
             resultString = new String(result, "UTF-8");
         } finally {
             in.close();
