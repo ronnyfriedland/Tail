@@ -1,13 +1,14 @@
 package de.ronnyfriedland.tail.lib.script;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.io.IOUtils;
 
 import de.ronnyfriedland.tail.lib.cmd.Cmd;
 
@@ -20,6 +21,9 @@ public class ScriptCmd implements Cmd {
 
     /** Logger for {@link ScriptCmd} */
     private static final java.util.logging.Logger LOG = java.util.logging.Logger.getLogger(ScriptCmd.class.getName());
+
+    private static long contentLength = 0;
+    private static long contentRange = 2048;
 
     /**
      * {@inheritDoc}
@@ -39,8 +43,6 @@ public class ScriptCmd implements Cmd {
         executor.setStreamHandler(streamHandler);
         try {
             executor.execute(cmdLine);
-        } catch (ExecuteException e) {
-            LOG.log(Level.SEVERE, "error calling script", e);
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "error calling script", e);
         } finally {
@@ -50,7 +52,25 @@ public class ScriptCmd implements Cmd {
                 LOG.log(Level.WARNING, "error closing data stream", e);
             }
         }
-        return (outputStream.toString());
-    }
 
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        try {
+            long availableSize = outputStream.size();
+            if (availableSize > contentLength) {
+                long newDataSize;
+                if (0 == contentLength) {
+                    contentLength = availableSize - contentRange;
+                    newDataSize = contentRange;
+                } else {
+                    newDataSize = Math.min(contentRange, availableSize - contentLength);
+                }
+                IOUtils.copyLarge(new ByteArrayInputStream(outputStream.toByteArray()), result, contentLength,
+                        contentLength + newDataSize);
+                contentLength += newDataSize;
+            }
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "error retrieving data", e);
+        }
+        return (result.toString());
+    }
 }
