@@ -4,11 +4,11 @@
     <parent>
         <artifactId>tail-parent</artifactId>
         <groupId>de.ronnyfriedland</groupId>
-        <version>0.0.3-SNAPSHOT</version>
+        <version>0.0.4-SNAPSHOT</version>
     </parent>
     <groupId>de.ronnyfriedland</groupId>
     <artifactId>tail-web</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>TAIL::WEB</name>
     <dependencies>
